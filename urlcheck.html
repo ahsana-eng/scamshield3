@@ -4,19 +4,18 @@
     <meta charset="UTF-8">
     <title>ScamShield - URL Checker</title>
     <link rel="stylesheet" href="style.css">
+    <script src="scripts.js" defer></script>
 </head>
 <body>
     <h1>ScamShield</h1>
-    <p>Paste the URL to check for phishing:</p>
+    <p>Paste the URL you want to check for phishing:</p>
     <input type="text" id="urlinput" placeholder="Enter URL here" size="60">
-    <br><br>
+    <br>
     <button id="urlcheckbtn">Analyze URL</button>
 
     <h2>Results</h2>
     <p>Threat Type: <span id="urlthreattype">-</span></p>
     <p>Risk Score: <span id="urlscore">0%</span></p>
     <p>Confidence: <span id="urlconfidence">-</span></p>
-
-    <script src="scripts.js"></script>
 </body>
 </html>

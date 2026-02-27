@@ -1,143 +1,88 @@
-document.getElementById("analyzebtn").addEventListener("click", function () {
+document.addEventListener("DOMContentLoaded", function () {
 
-    let message = document.getElementById("msginput").value;
-    message = message.toLowerCase();
+    // ================== Message Analyzer ==================
+    const analyzeBtn = document.getElementById("analyzebtn");
+    if (analyzeBtn) {
+        analyzeBtn.addEventListener("click", function () {
+            const msgInput = document.getElementById("msginput").value.toLowerCase();
+            let score = 0;
+            let detectedWords = [];
 
-    let score = 0;
+            const highRiskWords = ["otp","bank account","share password","account suspended"];
+            const mediumRiskWords = ["verify","click here","urgent","claim","lottery"];
+            const lowRiskWords = ["free","winner","congratulations"];
+            const safeWords = ["official","secured","protected"];
 
-    // High Risk Keywords (Very dangerous)
-    let highRiskWords = [
-        "otp",
-        "bank account",
-        "share password",
-        "account suspended"
-    ];
+            highRiskWords.forEach(word => {
+                const count = (msgInput.match(new RegExp(word, "gi")) || []).length;
+                if (count) { score += 30*count; detectedWords.push(word); }
+            });
+            mediumRiskWords.forEach(word => {
+                const count = (msgInput.match(new RegExp(word, "gi")) || []).length;
+                if (count) { score += 15*count; detectedWords.push(word); }
+            });
+            lowRiskWords.forEach(word => {
+                const count = (msgInput.match(new RegExp(word, "gi")) || []).length;
+                if (count) { score += 5*count; detectedWords.push(word); }
+            });
+            safeWords.forEach(word => {
+                if (msgInput.includes(word)) { score -= 10; detectedWords.push("safe: "+word); }
+            });
 
-    // Medium Risk Keywords
-    let mediumRiskWords = [
-        "verify",
-        "click here",
-        "urgent",
-        "claim",
-        "lottery"
-    ];
+            score = Math.min(Math.max(score, 0), 100);
 
-    // Low Risk Keywords
-    let lowRiskWords = [
-        "free",
-        "winner",
-        "congratulations"
-    ];
+            let level = "";
+            if (score === 0) level = "Safe";
+            else if (score <= 30) level = "Low Risk";
+            else if (score <= 60) level = "Medium Risk";
+            else level = "High Risk";
 
-    // Check high risk words
-    for (let i = 0; i < highRiskWords.length; i++) {
-        if (message.includes(highRiskWords[i])) {
-            score += 90;
-        }
+            const explanation = detectedWords.length ? "Detected: "+detectedWords.join(", ") : "No suspicious keywords";
+
+            document.getElementById("scoredisplay")?.innerText = score+"%";
+            document.getElementById("riskdisplay")?.innerText = level;
+            document.getElementById("riskexplain")?.innerText = explanation;
+        });
     }
 
-    // Check medium risk words
-    for (let i = 0; i < mediumRiskWords.length; i++) {
-        if (message.includes(mediumRiskWords[i])) {
-            score += 20;
-        }
-    }
+    // ================== URL Checker ==================
+    const urlCheckBtn = document.getElementById("urlcheckbtn");
+    if (urlCheckBtn) {
+        urlCheckBtn.addEventListener("click", function () {
+            const url = document.getElementById("urlinput").value.trim().toLowerCase();
+            if (!url) {
+                alert("Please enter a URL!");
+                return;
+            }
 
-    // Check low risk words
-    for (let i = 0; i < lowRiskWords.length; i++) {
-        if (message.includes(lowRiskWords[i])) {
-            score += 10;
-        }
-    }
+            let score = 0;
+            let threatTypes = [];
 
-    // Cap score at 100%
-    if (score > 100) {
-        score = 100;
-    }
+            const shorteners = ["bit.ly","tinyurl","goo.gl","t.co","ow.ly"];
+            if (shorteners.some(s => url.includes(s))) { score += 25; threatTypes.push("Shortened URL"); }
 
-    let riskLevel = "";
+            const suspiciousTLDs = [".ru",".xyz",".cn",".tk"];
+            if (suspiciousTLDs.some(t => url.endsWith(t))) { score += 30; threatTypes.push("Suspicious Domain"); }
 
-    if (score === 0) {
-        riskLevel = "Safe";
-    }
-    else if (score <= 30) {
-        riskLevel = "Low Risk";
-    }
-    else if (score <= 60) {
-        riskLevel = "Medium Risk";
-    }
-    else {
-        riskLevel = "High Risk";
-    }
+            const ipRegex = /^(http[s]?:\/\/)?\d{1,3}(\.\d{1,3}){3}/;
+            if (ipRegex.test(url)) { score += 20; threatTypes.push("IP Address URL"); }
 
-    document.getElementById("scoredisplay").innerText = score + "%";
-    document.getElementById("riskdisplay").innerText = riskLevel;
+            const randomNumRegex = /[a-z]*\d{3,}[a-z]*\./;
+            if (randomNumRegex.test(url)) { score += 15; threatTypes.push("Random Numbers in Domain"); }
+
+            if (url.startsWith("http://")) { score += 10; threatTypes.push("Not Secure (HTTP)"); }
+
+            score = Math.min(score, 100);
+
+            let confidence = "";
+            if (score < 20) confidence = "Low";
+            else if (score < 50) confidence = "Medium";
+            else confidence = "High";
+
+            document.getElementById("urlthreattype")?.innerText = threatTypes.length ? threatTypes.join(", ") : "Safe";
+            document.getElementById("urlscore")?.innerText = score + "%";
+            document.getElementById("urlconfidence")?.innerText = confidence;
+        });
+    }
 
 });
-// ================== URL Phishing Detector ==================
-const urlCheckBtn = document.getElementById("urlcheckbtn");
-if (urlCheckBtn) {
-    urlCheckBtn.addEventListener("click", function () {
-        const url = document.getElementById("urlinput").value.trim().toLowerCase();
-        const result = analyzeURL(url);
-        document.getElementById("urlthreattype").innerText = result.type;
-        document.getElementById("urlscore").innerText = result.score + "%";
-        document.getElementById("urlconfidence").innerText = result.confidence;
-    });
-}
-
-function analyzeURL(url) {
-    if (!url) return { type: "-", score: 0, confidence: "-" };
-
-    let score = 0;
-    let threatType = [];
-    
-    // Check for shortened URLs
-    const shorteners = ["bit.ly", "tinyurl", "goo.gl", "t.co", "ow.ly"];
-    if (shorteners.some(domain => url.includes(domain))) {
-        score += 25;
-        threatType.push("Shortened URL");
-    }
-
-    // Suspicious domains
-    const suspiciousTLDs = [".ru", ".xyz", ".cn", ".tk"];
-    if (suspiciousTLDs.some(tld => url.endsWith(tld))) {
-        score += 30;
-        threatType.push("Suspicious Domain");
-    }
-
-    // IP address URL
-    const ipRegex = /^(http[s]?:\/\/)?\d{1,3}(\.\d{1,3}){3}/;
-    if (ipRegex.test(url)) {
-        score += 20;
-        threatType.push("IP Address URL");
-    }
-
-    // Random numbers in domain (e.g., login123.site.com)
-    const randomNumRegex = /[a-z]*\d{3,}[a-z]*\./;
-    if (randomNumRegex.test(url)) {
-        score += 15;
-        threatType.push("Random Numbers in Domain");
-    }
-
-    // HTTP instead of HTTPS
-    if (url.startsWith("http://")) {
-        score += 10;
-        threatType.push("Not Secure (HTTP)");
-    }
-
-    // Cap score at 100%
-    score = Math.min(score, 100);
-
-    // Confidence based on score
-    let confidence = "";
-    if (score < 20) confidence = "Low";
-    else if (score < 50) confidence = "Medium";
-    else confidence = "High";
-
-    return {
-        type: threatType.length ? threatType.join(", ") : "Safe",
-        score,
-        confidence
-    };
-}
