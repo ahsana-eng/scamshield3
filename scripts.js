@@ -74,3 +74,70 @@ document.getElementById("analyzebtn").addEventListener("click", function () {
     document.getElementById("riskdisplay").innerText = riskLevel;
 
 });
+// ================== URL Phishing Detector ==================
+const urlCheckBtn = document.getElementById("urlcheckbtn");
+if (urlCheckBtn) {
+    urlCheckBtn.addEventListener("click", function () {
+        const url = document.getElementById("urlinput").value.trim().toLowerCase();
+        const result = analyzeURL(url);
+        document.getElementById("urlthreattype").innerText = result.type;
+        document.getElementById("urlscore").innerText = result.score + "%";
+        document.getElementById("urlconfidence").innerText = result.confidence;
+    });
+}
+
+function analyzeURL(url) {
+    if (!url) return { type: "-", score: 0, confidence: "-" };
+
+    let score = 0;
+    let threatType = [];
+    
+    // Check for shortened URLs
+    const shorteners = ["bit.ly", "tinyurl", "goo.gl", "t.co", "ow.ly"];
+    if (shorteners.some(domain => url.includes(domain))) {
+        score += 25;
+        threatType.push("Shortened URL");
+    }
+
+    // Suspicious domains
+    const suspiciousTLDs = [".ru", ".xyz", ".cn", ".tk"];
+    if (suspiciousTLDs.some(tld => url.endsWith(tld))) {
+        score += 30;
+        threatType.push("Suspicious Domain");
+    }
+
+    // IP address URL
+    const ipRegex = /^(http[s]?:\/\/)?\d{1,3}(\.\d{1,3}){3}/;
+    if (ipRegex.test(url)) {
+        score += 20;
+        threatType.push("IP Address URL");
+    }
+
+    // Random numbers in domain (e.g., login123.site.com)
+    const randomNumRegex = /[a-z]*\d{3,}[a-z]*\./;
+    if (randomNumRegex.test(url)) {
+        score += 15;
+        threatType.push("Random Numbers in Domain");
+    }
+
+    // HTTP instead of HTTPS
+    if (url.startsWith("http://")) {
+        score += 10;
+        threatType.push("Not Secure (HTTP)");
+    }
+
+    // Cap score at 100%
+    score = Math.min(score, 100);
+
+    // Confidence based on score
+    let confidence = "";
+    if (score < 20) confidence = "Low";
+    else if (score < 50) confidence = "Medium";
+    else confidence = "High";
+
+    return {
+        type: threatType.length ? threatType.join(", ") : "Safe",
+        score,
+        confidence
+    };
+}

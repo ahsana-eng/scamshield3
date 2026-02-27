@@ -59,3 +59,131 @@ button:hover {
 #riskdisplay {
     font-weight: bold;
 }
+/* ================= Full Page ================= */
+body {
+    background-color: #000000;
+    color: #00ff00;
+    font-family: "Courier New", Courier, monospace;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    padding: 50px 20px;
+}
+
+/* ================= Heading ================= */
+h1 {
+    font-size: 48px;
+    color: #00ff00;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    margin-bottom: 30px;
+}
+
+/* ================= Paragraphs ================= */
+p {
+    font-size: 14px;
+    margin: 10px 0;
+}
+
+/* ================= Input Fields ================= */
+textarea, input[type="text"] {
+    width: 400px;
+    padding: 10px;
+    background-color: #000000;
+    color: #00ff00;
+    border: 2px solid #00ff00;
+    font-family: "Courier New", Courier, monospace;
+    margin-bottom: 15px;
+}
+
+/* ================= Buttons ================= */
+button {
+    width: 150px;
+    padding: 6px;
+    background-color: #000000;
+    color: #00ff00;
+    border: 2px solid #00ff00;
+    cursor: pointer;
+    font-family: "Courier New", Courier, monospace;
+    margin-bottom: 20px;
+    transition: all 0.2s ease;
+}
+
+button:hover {
+    background-color: #00ff00;
+    color: #000000;
+}
+
+/* ================= Score / Risk / Result ================= */
+#scoredisplay,
+#riskdisplay,
+#riskexplain,
+#urlthreattype,
+#urlscore,
+#urlconfidence {
+    font-weight: bold;
+}
+
+/* ================= Result Sections ================= */
+h2 {
+    margin-top: 30px;
+    margin-bottom: 10px;
+    text-decoration: underline;
+}
+
+/* ================= URL Input Section ================= */
+input[type="text"] {
+    width: 400px;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+/* ================= Dashboard Tables ================= */
+table {
+    border-collapse: collapse;
+    width: 90%;
+    max-width: 800px;
+    margin: 20px 0;
+}
+
+th, td {
+    border: 2px solid #00ff00;
+    padding: 8px 12px;
+    text-align: left;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 14px;
+}
+
+th {
+    background-color: #000000;
+    color: #00ff00;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+tr:nth-child(even) {
+    background-color: #001100;
+}
+
+/* ================= Links ================= */
+a {
+    color: #00ff00;
+    text-decoration: underline;
+}
+
+a:hover {
+    color: #00cc00;
+}
+
+/* ================= Learn Page Lists ================= */
+ul, ol {
+    font-size: 14px;
+    margin: 10px 0 20px 20px;
+}
+
+/* ================= Risk Levels ================= */
+.safe { color: #00ff00; }       /* green */
+.low { color: #99ff00; }        /* light green */
+.medium { color: #ffaa00; }     /* orange */
+.high { color: #ff0000; }       /* red */
