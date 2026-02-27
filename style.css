@@ -18,11 +18,24 @@ h1 {
     margin-bottom: 30px;
 }
 
-h2 {
-    font-size: 22px;
-    text-decoration: underline;
-    margin-top: 20px;
-    margin-bottom: 10px;
+/* Typewriter Effect for Heading */
+#heading {
+    display: inline-block;
+    border-right: 2px solid #00ff00; /* cursor */
+    white-space: nowrap;
+    overflow: hidden;
+    animation: typewriter 2s steps(10) forwards, blink 0.7s infinite;
+}
+
+/* Typewriter keyframes */
+@keyframes typewriter {
+    from { width: 0; }
+    to { width: 13ch; } /* length of "ScamShield" */
+}
+
+@keyframes blink {
+    0%, 50%, 100% { border-color: #00ff00; }
+    25%, 75% { border-color: transparent; }
 }
 
 /* ----------------- Paragraphs ----------------- */
@@ -116,6 +129,7 @@ button {
     padding: 15px;
     margin-bottom: 20px;
     width: 100%;
+    max-width: 600px;
     box-sizing: border-box;
     transition: transform 0.3s ease, border-color 0.3s ease;
 }
@@ -129,6 +143,18 @@ button {
     0% { transform: scale(1); border-color: #00ff00; }
     50% { transform: scale(1.02); border-color: #ffffff; }
     100% { transform: scale(1); border-color: #00ff00; }
+}
+
+/* ----------------- Fade-In for Learn Page ----------------- */
+.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 /* ----------------- Responsive ----------------- */
