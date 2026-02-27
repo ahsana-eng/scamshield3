@@ -1,12 +1,13 @@
+// This runs after the page loads
+document.getElementById("analyzebtn").addEventListener("click", function () {
 
-function analyzeMessage() {
-
-
+    // Get message from textarea
     let message = document.getElementById("msginput").value;
 
+    // Convert to lowercase for easier checking
     message = message.toLowerCase();
 
-
+    // List of scam-related keywords
     let scamKeywords = [
         "urgent",
         "bank",
@@ -14,30 +15,29 @@ function analyzeMessage() {
         "password",
         "verify",
         "click here",
-        "limited time",
         "lottery",
         "winner",
         "congratulations",
         "free",
-        "claim now",
+        "claim",
         "account suspended"
     ];
 
     let score = 0;
 
-    // Check how many scam keywords appear
+    // Check how many keywords appear
     for (let i = 0; i < scamKeywords.length; i++) {
         if (message.includes(scamKeywords[i])) {
             score += 10;
         }
     }
 
-    // Cap score at 100%
+    // Limit score to 100%
     if (score > 100) {
         score = 100;
     }
 
-    // Determine risk level
+    // Decide risk level
     let riskLevel = "";
 
     if (score === 0) {
@@ -53,7 +53,8 @@ function analyzeMessage() {
         riskLevel = "High Risk";
     }
 
-    // Display results on the page
+    // Display results
     document.getElementById("scoredisplay").innerText = score + "%";
     document.getElementById("riskdisplay").innerText = riskLevel;
-}
+
+});
