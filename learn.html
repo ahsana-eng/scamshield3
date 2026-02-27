@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ScamShield - Cyber Awareness</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1 id="heading">ScamShield</h1>
+
+<div id="learn-content" class="fade-in">
+
+    <h2>Cyber Awareness</h2>
+
+    <div class="dashboard-box fade-in">
+        <h3>Common Scam Types</h3>
+        <ul>
+            <li>Phishing emails and messages</li>
+            <li>Fake lottery/win scams</li>
+            <li>OTP or banking scams</li>
+            <li>Tech support scams</li>
+        </ul>
+    </div>
+
+    <div class="dashboard-box fade-in">
+        <h3>How Phishing Works</h3>
+        <p>Phishing is when attackers trick users into giving sensitive info like passwords, bank details, or OTPs using fake emails, websites, or messages.</p>
+    </div>
+
+    <div class="dashboard-box fade-in">
+        <h3>Red Flags Checklist</h3>
+        <ul>
+            <li>Urgent action requested</li>
+            <li>Unexpected links or attachments</li>
+            <li>Requests for passwords, OTPs, or personal info</li>
+            <li>Suspicious sender or domain</li>
+        </ul>
+    </div>
+
+    <div class="dashboard-box fade-in">
+        <h3>Safety Tips</h3>
+        <ul>
+            <li>Verify links before clicking</li>
+            <li>Never share passwords or OTPs</li>
+            <li>Use 2FA wherever possible</li>
+            <li>Report suspicious messages</li>
+        </ul>
+    </div>
+
+</div>
+
+<script src="scripts.js"></script>
+<script>
+    // Typewriter + fade-in animation for Learn page
+    const heading = document.getElementById("heading");
+    const learnContent = document.getElementById("learn-content");
+
+    heading.addEventListener("animationend", () => {
+        learnContent.classList.add("visible");
+        const fadeElements = document.querySelectorAll("#learn-content > .fade-in");
+        fadeElements.forEach((el, i)=>{
+            setTimeout(()=> el.classList.add("visible"), 200*i);
+        });
+    });
+</script>
+
+</body>
+</html>
