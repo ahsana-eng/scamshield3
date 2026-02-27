@@ -1,86 +1,4 @@
-/* Full page background */
-body {
-    background-color: #000000;
-    color: #00ff00;
-    font-family: "Courier New", Courier, monospace;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 0;
-    padding-top: 50px;
-}
-
-/* Heading - Digital Look */
-h1 {
-    font-size: 48px;
-    color: #00ff00;
-    text-transform: uppercase;
-    letter-spacing: 4px;
-    margin-bottom: 30px;
-}
-
-/* All paragraph text */
-p {
-    font-size: 14px;
-    margin: 10px 0;
-}
-
-/* Textarea styling */
-textarea {
-    width: 400px;
-    padding: 10px;
-    background-color: #000000;
-    color: #00ff00;
-    border: 2px solid #00ff00;
-    font-family: "Courier New", Courier, monospace;
-    margin-bottom: 15px;
-}
-
-/* Smaller Analyze Button */
-button {
-    width: 150px;
-    padding: 6px;
-    background-color: #000000;
-    color: #00ff00;
-    border: 2px solid #00ff00;
-    cursor: pointer;
-    font-family: "Courier New", Courier, monospace;
-    margin-bottom: 20px;
-}
-
-/* Button Hover Effect */
-button:hover {
-    background-color: #00ff00;
-    color: #000000;
-}
-
-/* Score and Risk Display */
-#scoredisplay,
-#riskdisplay {
-    font-weight: bold;
-}
-/* URL Checker input field */
-input[type="text"] {
-    width: 400px;
-    padding: 10px;
-    background-color: #000000;
-    color: #00ff00;
-    border: 2px solid #00ff00;
-    font-family: "Courier New", Courier, monospace;
-    margin-bottom: 15px;
-}
-
-/* URL Checker results */
-#urlthreattype, #urlscore, #urlconfidence {
-    font-weight: bold;
-}
-
-/* Result section heading */
-h2 {
-    margin-top: 30px;
-    margin-bottom: 10px;
-    text-decoration: underline;
-}/* ----------------- General Body ----------------- */
+/* ----------------- General Body ----------------- */
 body {
     background-color: #000000;
     color: #00ff00;
@@ -95,7 +13,6 @@ body {
 /* ----------------- Headings ----------------- */
 h1 {
     font-size: 48px;
-    color: #00ff00;
     text-transform: uppercase;
     letter-spacing: 4px;
     margin-bottom: 30px;
@@ -135,17 +52,25 @@ p {
 #tabs button:hover {
     background-color: #00ff00;
     color: #000;
+    box-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00, 0 0 30px #00ff00;
+    transform: scale(1.05);
 }
 
+/* ----------------- Tab Content ----------------- */
 .tab-content {
-    display: none; /* hidden by default */
+    display: none;
     margin-top: 20px;
     width: 100%;
     max-width: 600px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 .tab-content.active {
     display: block;
+    opacity: 1;
+    transform: translateY(0);
 }
 
 /* ----------------- Input & Textarea ----------------- */
@@ -173,14 +98,16 @@ button {
     transition: all 0.2s ease;
 }
 
-button:hover {
-    background-color: #00ff00;
-    color: #000;
-}
-
-/* ----------------- Results Display ----------------- */
+/* ----------------- Result Display ----------------- */
 #scoredisplay, #riskdisplay, #urlscore, #urlconfidence, #urlthreattype, #riskexplain {
     font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+/* ----------------- Signal Breakdown Flash ----------------- */
+#riskexplain.highlight {
+    color: #ff0000;
+    text-shadow: 0 0 5px #ff0000, 0 0 10px #ff0000;
 }
 
 /* ----------------- Dashboard Boxes ----------------- */
@@ -190,17 +117,22 @@ button:hover {
     margin-bottom: 20px;
     width: 100%;
     box-sizing: border-box;
+    transition: transform 0.3s ease, border-color 0.3s ease;
 }
 
-.dashboard-box p {
-    margin: 5px 0;
+/* Pulse Animation on Update */
+.dashboard-box.updated {
+    animation: pulse 0.5s ease;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); border-color: #00ff00; }
+    50% { transform: scale(1.02); border-color: #ffffff; }
+    100% { transform: scale(1); border-color: #00ff00; }
 }
 
 /* ----------------- Responsive ----------------- */
 @media (max-width: 650px) {
-    textarea, input[type="text"] {
-        width: 100%;
-    }
     #tabs {
         flex-direction: column;
         gap: 10px;
@@ -208,7 +140,7 @@ button:hover {
     #tabs button {
         width: 100%;
     }
-    .dashboard-box {
+    textarea, input[type="text"], .dashboard-box {
         width: 100%;
     }
 }
