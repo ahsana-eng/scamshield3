@@ -27,8 +27,8 @@ document.addEventListener("DOMContentLoaded", function(){
 
             // High risk words = 90 points
             high.forEach(w=>{ if(msg.includes(w)){score+=90; signals.push(w);} });
-            medium.forEach(w=>{ if(msg.includes(w)){score+=15; signals.push(w);} });
-            low.forEach(w=>{ if(msg.includes(w)){score+=5; signals.push(w);} });
+            medium.forEach(w=>{ if(msg.includes(w)){score+=50; signals.push(w);} });
+            low.forEach(w=>{ if(msg.includes(w)){score+=20; signals.push(w);} });
 
             score=Math.min(Math.max(score,0),100);
 
@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function(){
             if(tlds.some(t=>url.endsWith(t))){score+=25; threats.push("Suspicious Domain");}
             if(ipRegex.test(url)){score+=15; threats.push("IP Address URL");}
             if(randNum.test(url)){score+=10; threats.push("Random Numbers");}
-            if(url.startsWith("http://")){score+=10; threats.push("Not Secure");}
+            if(url.startsWith("http://")){score+=70; threats.push("Not Secure");}
 
             // Cap max risk at 70%
             score = Math.min(score, 70);
