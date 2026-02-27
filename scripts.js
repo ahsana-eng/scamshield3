@@ -1,7 +1,10 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-    // ----------------- Utility Animations -----------------
+    // -------------------- Utilities --------------------
+
+    // Animate numeric score
     function animateScore(element, finalScore) {
+        if(!element) return;
         let current = 0;
         const increment = finalScore > 50 ? 2 : 1;
         const interval = setInterval(() => {
@@ -15,12 +18,14 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 15);
     }
 
+    // Flash highlight effect
     function flashElement(el){
         if(!el) return;
         el.classList.add("highlight");
-        setTimeout(()=>el.classList.remove("highlight"),500);
+        setTimeout(()=> el.classList.remove("highlight"),500);
     }
 
+    // Pulse dashboard boxes
     function pulseDashboard(){
         document.querySelectorAll(".dashboard-box").forEach(box=>{
             box.classList.add("updated");
@@ -28,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // ----------------- Tabs -----------------
+    // -------------------- Tabs --------------------
     const tabButtons = document.querySelectorAll("#tabs button");
     const tabContents = document.querySelectorAll(".tab-content");
 
@@ -45,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if(tabContents.length>0) tabContents[0].classList.add("active");
 
-    // ----------------- Message Analyzer -----------------
+    // -------------------- Message Analyzer --------------------
     const analyzeBtn = document.getElementById("analyzebtn");
     if(analyzeBtn){
         analyzeBtn.addEventListener("click",()=>{
@@ -80,7 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if(scoreEl) animateScore(scoreEl,score);
             if(riskEl) riskEl.innerText = risk;
             if(explainEl){
-                explainEl.innerText=signals.join(", ")||"-";
+                explainEl.innerText = signals.join(", ") || "-";
                 flashElement(explainEl);
             }
 
@@ -93,7 +98,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // ----------------- URL Checker -----------------
+    // -------------------- URL Checker --------------------
     const urlBtn = document.getElementById("urlcheckbtn");
     if(urlBtn){
         urlBtn.addEventListener("click",()=>{
@@ -129,7 +134,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if(threatEl) threatEl.innerText=threats.join(",")||"Safe";
             if(scoreEl) animateScore(scoreEl,score);
-            if(confEl) confEl.innerText=confidence;
+            if(confEl) confEl.innerText = confidence;
 
             localStorage.setItem("lastURL",JSON.stringify({
                 url: urlEl.value,
@@ -140,22 +145,36 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // ----------------- Dashboard Update -----------------
+    // -------------------- Dashboard --------------------
     function updateDashboard(){
-        const lastMessage = JSON.parse(localStorage.getItem("lastMessage"))||{};
-        const lastURL = JSON.parse(localStorage.getItem("lastURL"))||{};
+        const lastMessage = JSON.parse(localStorage.getItem("lastMessage")) || {};
+        const lastURL = JSON.parse(localStorage.getItem("lastURL")) || {};
 
-        document.getElementById("dash-message").innerText = lastMessage.text||"-";
-        document.getElementById("dash-message-score").innerText = lastMessage.score||"-";
-        document.getElementById("dash-message-risk").innerText = lastMessage.risk||"-";
-        document.getElementById("dash-message-signals").innerText = lastMessage.signals||"-";
+        document.getElementById("dash-message").innerText = lastMessage.text || "-";
+        document.getElementById("dash-message-score").innerText = lastMessage.score || "-";
+        document.getElementById("dash-message-risk").innerText = lastMessage.risk || "-";
+        document.getElementById("dash-message-signals").innerText = lastMessage.signals || "-";
 
-        document.getElementById("dash-url").innerText = lastURL.url||"-";
-        document.getElementById("dash-url-score").innerText = lastURL.score||"-";
-        document.getElementById("dash-url-type").innerText = lastURL.threatType||"-";
-        document.getElementById("dash-url-confidence").innerText = lastURL.confidence||"-";
+        document.getElementById("dash-url").innerText = lastURL.url || "-";
+        document.getElementById("dash-url-score").innerText = lastURL.score || "-";
+        document.getElementById("dash-url-type").innerText = lastURL.threatType || "-";
+        document.getElementById("dash-url-confidence").innerText = lastURL.confidence || "-";
 
         pulseDashboard();
+    }
+
+    // -------------------- Learn Page Animations --------------------
+    const learnHeading = document.getElementById("heading");
+    const learnContent = document.getElementById("learn-content");
+
+    if(learnHeading && learnContent){
+        learnHeading.addEventListener("animationend", () => {
+            learnContent.classList.add("visible");
+            const fadeElements = document.querySelectorAll("#learn-content > .fade-in");
+            fadeElements.forEach((el,i)=>{
+                setTimeout(()=> el.classList.add("visible"), 200*i);
+            });
+        });
     }
 
 });
