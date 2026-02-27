@@ -80,4 +80,135 @@ h2 {
     margin-top: 30px;
     margin-bottom: 10px;
     text-decoration: underline;
+}/* ----------------- General Body ----------------- */
+body {
+    background-color: #000000;
+    color: #00ff00;
+    font-family: "Courier New", Courier, monospace;
+    margin: 0;
+    padding: 50px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ----------------- Headings ----------------- */
+h1 {
+    font-size: 48px;
+    color: #00ff00;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    margin-bottom: 30px;
+}
+
+h2 {
+    font-size: 22px;
+    text-decoration: underline;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+/* ----------------- Paragraphs ----------------- */
+p {
+    font-size: 14px;
+    margin: 10px 0;
+}
+
+/* ----------------- Tabs ----------------- */
+#tabs {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+#tabs button {
+    width: 200px;
+    padding: 6px;
+    background-color: #000;
+    color: #00ff00;
+    border: 2px solid #00ff00;
+    cursor: pointer;
+    font-family: "Courier New", Courier, monospace;
+    transition: all 0.2s ease;
+}
+
+#tabs button:hover {
+    background-color: #00ff00;
+    color: #000;
+}
+
+.tab-content {
+    display: none; /* hidden by default */
+    margin-top: 20px;
+    width: 100%;
+    max-width: 600px;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* ----------------- Input & Textarea ----------------- */
+textarea, input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #000;
+    color: #00ff00;
+    border: 2px solid #00ff00;
+    font-family: "Courier New", Courier, monospace;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+/* ----------------- Buttons ----------------- */
+button {
+    width: 200px;
+    padding: 6px;
+    background-color: #000;
+    color: #00ff00;
+    border: 2px solid #00ff00;
+    cursor: pointer;
+    font-family: "Courier New", Courier, monospace;
+    margin: 10px 0;
+    transition: all 0.2s ease;
+}
+
+button:hover {
+    background-color: #00ff00;
+    color: #000;
+}
+
+/* ----------------- Results Display ----------------- */
+#scoredisplay, #riskdisplay, #urlscore, #urlconfidence, #urlthreattype, #riskexplain {
+    font-weight: bold;
+}
+
+/* ----------------- Dashboard Boxes ----------------- */
+.dashboard-box {
+    border: 2px solid #00ff00;
+    padding: 15px;
+    margin-bottom: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.dashboard-box p {
+    margin: 5px 0;
+}
+
+/* ----------------- Responsive ----------------- */
+@media (max-width: 650px) {
+    textarea, input[type="text"] {
+        width: 100%;
+    }
+    #tabs {
+        flex-direction: column;
+        gap: 10px;
+    }
+    #tabs button {
+        width: 100%;
+    }
+    .dashboard-box {
+        width: 100%;
+    }
 }
