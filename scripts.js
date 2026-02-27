@@ -32,7 +32,7 @@ document.getElementById("analyzebtn").addEventListener("click", function () {
     // Check high risk words
     for (let i = 0; i < highRiskWords.length; i++) {
         if (message.includes(highRiskWords[i])) {
-            score += 40;
+            score += 90;
         }
     }
 
