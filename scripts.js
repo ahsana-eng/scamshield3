@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", function(){
             const tabId = btn.getAttribute("data-tab");
             tabContents.forEach(tc=>tc.classList.remove("active"));
             document.getElementById(tabId).classList.add("active");
+
             if(tabId==="dashboard") updateDashboard();
             if(tabId==="learn") animateLearn();
         });
@@ -23,17 +24,26 @@ document.addEventListener("DOMContentLoaded", function(){
             const high=["otp","bank account","share password","account suspended"];
             const medium=["verify","click here","urgent","claim","lottery"];
             const low=["free","winner","congratulations"];
-            high.forEach(w=>{ if(msg.includes(w)){score+=30; signals.push(w);} });
+
+            // High risk words = 90 points
+            high.forEach(w=>{ if(msg.includes(w)){score+=90; signals.push(w);} });
             medium.forEach(w=>{ if(msg.includes(w)){score+=15; signals.push(w);} });
             low.forEach(w=>{ if(msg.includes(w)){score+=5; signals.push(w);} });
+
             score=Math.min(Math.max(score,0),100);
+
             let risk=score===0?"Safe":score<=30?"Low Risk":score<=60?"Medium Risk":"High Risk";
 
             document.getElementById("scoredisplay").innerText=score+"%";
             document.getElementById("riskdisplay").innerText=risk;
             document.getElementById("riskexplain").innerText=signals.join(", ") || "-";
 
-            localStorage.setItem("lastMessage", JSON.stringify({text: msg, score:score+"%", risk:risk, signals:signals.join(", ")}));
+            localStorage.setItem("lastMessage", JSON.stringify({
+                text: msg,
+                score: score+"%",
+                risk: risk,
+                signals: signals.join(", ")
+            }));
         });
     }
 
@@ -47,19 +57,29 @@ document.addEventListener("DOMContentLoaded", function(){
             const tlds=[".ru",".xyz",".cn",".tk"];
             const ipRegex=/^(http[s]?:\/\/)?\d{1,3}(\.\d{1,3}){3}/;
             const randNum=/[a-z]*\d{3,}[a-z]*\./;
-            if(shorteners.some(s=>url.includes(s))){score+=25; threats.push("Shortened URL");}
-            if(tlds.some(t=>url.endsWith(t))){score+=30; threats.push("Suspicious Domain");}
-            if(ipRegex.test(url)){score+=20; threats.push("IP Address URL");}
-            if(randNum.test(url)){score+=15; threats.push("Random Numbers");}
+
+            // URL risk contribution
+            if(shorteners.some(s=>url.includes(s))){score+=20; threats.push("Shortened URL");}
+            if(tlds.some(t=>url.endsWith(t))){score+=25; threats.push("Suspicious Domain");}
+            if(ipRegex.test(url)){score+=15; threats.push("IP Address URL");}
+            if(randNum.test(url)){score+=10; threats.push("Random Numbers");}
             if(url.startsWith("http://")){score+=10; threats.push("Not Secure");}
-            score=Math.min(score,100);
+
+            // Cap max risk at 70%
+            score = Math.min(score, 70);
+
             let confidence=score<20?"Low":score<50?"Medium":"High";
 
-            document.getElementById("urlthreattype").innerText=threats.join(",")||"Safe";
-            document.getElementById("urlscore").innerText=score+"%";
-            document.getElementById("urlconfidence").innerText=confidence;
+            document.getElementById("urlthreattype").innerText = threats.join(",") || "Safe";
+            document.getElementById("urlscore").innerText = score + "%";
+            document.getElementById("urlconfidence").innerText = confidence;
 
-            localStorage.setItem("lastURL", JSON.stringify({url:url, score:score+"%", threatType:threats.join(",")||"Safe", confidence:confidence}));
+            localStorage.setItem("lastURL", JSON.stringify({
+                url: url,
+                score: score+"%",
+                threatType: threats.join(",") || "Safe",
+                confidence: confidence
+            }));
         });
     }
 
@@ -67,14 +87,17 @@ document.addEventListener("DOMContentLoaded", function(){
     function updateDashboard(){
         const lastMessage=JSON.parse(localStorage.getItem("lastMessage"))||{};
         const lastURL=JSON.parse(localStorage.getItem("lastURL"))||{};
+
         document.getElementById("dash-message").innerText = lastMessage.text || "-";
         document.getElementById("dash-message-score").innerText = lastMessage.score || "-";
         document.getElementById("dash-message-risk").innerText = lastMessage.risk || "-";
         document.getElementById("dash-message-signals").innerText = lastMessage.signals || "-";
+
         document.getElementById("dash-url").innerText = lastURL.url || "-";
         document.getElementById("dash-url-score").innerText = lastURL.score || "-";
         document.getElementById("dash-url-type").innerText = lastURL.threatType || "-";
         document.getElementById("dash-url-confidence").innerText = lastURL.confidence || "-";
+
         document.querySelectorAll(".dashboard-box").forEach(box=>{
             box.classList.add("updated");
             setTimeout(()=>box.classList.remove("updated"),500);
@@ -87,7 +110,7 @@ document.addEventListener("DOMContentLoaded", function(){
         fadeElements.forEach((el,i)=> setTimeout(()=>el.classList.add("visible"), 200*i));
     }
 
-    // ---------- Typewriter show main content ----------
+    // ---------- Typewriter heading show learn page content ----------
     const heading = document.getElementById("heading");
     heading.addEventListener("animationend", ()=>{
         if(document.querySelector(".tab-content.active.fade-in")) animateLearn();
